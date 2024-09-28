@@ -49,11 +49,11 @@ fn initialize_player() -> Player
     }
 }
 
-fn game_loop(rooms: &Vec<Room>, player: &mut Player)
+fn game_loop(rooms: &mut Vec<Room>, player: &mut Player)
 {
     loop 
     {
-        let current_room = rooms.iter().find(|room| room.name == player.current_room).unwrap();
+        let current_room = rooms.iter_mut().find(|room| room.name == player.current_room).unwrap();
         println!("You are in: {}", current_room.name);
         println!("{}", current_room.description);
         println!("Exits: {:?}", current_room.exits);
@@ -117,7 +117,7 @@ fn drop_item(item: &str, room: &mut Room, player: &mut Player)
 }
 fn main()
 {
-    let rooms = create_rooms();
+    let mut rooms = create_rooms();
     let mut player = initialize_player();
-    game_loop(&rooms, &mut player);
+    game_loop(&mut rooms, &mut player);
 }
