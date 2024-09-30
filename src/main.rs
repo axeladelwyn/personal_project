@@ -19,6 +19,15 @@ struct Player
     experience_points: i32,
 }
 
+// Add monster
+struct Monster
+{
+    //hp
+    //mp
+    //enemy type could be 
+    // melee or range
+}
+
 fn create_rooms() -> Vec<Room> 
 {
 
@@ -27,30 +36,44 @@ fn create_rooms() -> Vec<Room>
 
     let mut hallway_exits = HashMap::new();
     hallway_exits.insert("south".to_string(), "Entrance".to_string());
-    hallway_exits.inesrt("east".to_string(), "Armory".to_string());
+    hallway_exits.insert("east".to_string(), "Armory".to_string());
+
+    let mut armory_exits = HashMap::new();
+    armory_exits.insert("west".to_string(), "Hallway".to_string());
+    armory_exits.insert("north".to_string(), "Treasure Room".to_string());
+
+    let mut treasure_room_exits = HashMap::new();
+    treasure_room_exits.insert("south".to_string(), "Armory".to_string());
     vec!
     [
         Room
         {
-            name: String::from("Entrance"),
-            description: String::from("You are at the entrance of the dungeon"),
-            exits: vec![String::from("north")],
+            name: "Entrance".to_string(),
+            description: "You are at the entrance of the dungeon".to_string(),
+            exits: entrance_exits,
             items: vec![String::from("torch")],
         },
         Room
         {
             name: String::from("Hallway"),
             description: String::from("A long, dark hallway."),
-            exits: vec![String::from("south"), String::from("east")],
+            exits: hallway_exits,
             items: vec![],
         },
         Room
         {
             name: String::from("Armory"),
-            description: String::from("Old, used armory."),
-            exits: vec![String::from("west"), String::from("north")],
+            description: "Old, used armory.".to_string(),
+            exits: armory_exits,
             items: vec![String::from("sword"), String::from("shield")],
-        }
+        },
+        Room
+        {
+            name: "Treasure Room".to_string(),
+            description: "A room filled to the brim with gold.".to_string(),
+            exits: treasure_room_exits,
+            items: vec!["Legendary Sword".to_string(), "BreastPlate Armor".to_string()],
+        },
     ]
 }
 
