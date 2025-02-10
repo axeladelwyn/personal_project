@@ -1,3 +1,5 @@
+
+// what should i add next?
 use rand::Rng;
 use std::collections::HashMap;
 
@@ -22,6 +24,13 @@ struct Player
 // Add monster
 struct Monster
 {
+    current_rooms: String,
+    health_points: i32,
+    magic_points: i32,
+    level: i32,
+    enemy_type: String, // melee or ranged
+    attack_damage: i32, // new field
+
     //hp
     //mp
     //enemy type could be 
@@ -90,7 +99,49 @@ fn initialize_player() -> Player
     }
 }
 
-fn game_loop(rooms: &mut Vec<Room>, player: &mut Player)
+// initialize monster
+fn initialize_monster() -> Monster 
+{
+    let mut rng = rand::thread_rng();
+    let monster_type = if rng.gen_bool(0.5) {"melee"} else {"ranged"};
+
+    let (health, magic, attack) = match monster_type 
+    {
+        "melee" => (120, 30, 15), // Stronger in HP, weaker in MP
+        "ranged" => (80, 70, 20), // Weaker HP, stronger MP and attack
+        _ => (100, 50, 10),
+    };
+
+
+    Monster {
+        current_rooms: "Entrance".to_string(),
+        health_points: health,
+        magic_points: magic,
+        level: 1,
+        enemy_type: monster_type.to_string(),
+        attack_damage: attack,
+    }
+}
+
+fn fight_monster(player: &mut Player, monster: &mut Monster)
+{
+    println!("You've encountered a monster!");
+    let mut rng = rand::thread_rng();
+    let monster_type = rng.gen_range(0..=1);
+    if monster_type == 0
+    {
+        println!("You've encountered a melee monster!");
+    }
+    else 
+    {
+        println!("You've encountered a range monster!");
+    }
+
+
+}
+
+
+fn game_loop(rooms: &mut Vec<Room>, player: &mut Player, monster: &mut Monster)
 {
     loop 
     {
@@ -106,6 +157,14 @@ fn game_loop(rooms: &mut Vec<Room>, player: &mut Player)
         println!("Enter a command: ");
         std::io::stdin().read_line(&mut command).unwrap();
         let command = command.trim().to_lowercase();
+        // generate a monster in random room
+        let mut rng = rand::thread_rng();
+        let monster_chance = rng.gen_range(0..100);
+        if monster_chance < rng.gen_range(10..=30)
+        {
+            fight_monster(player, monster);
+        }
+        
 
         // traps appearance in a room
         let mut rng = rand::thread_rng();
@@ -217,9 +276,12 @@ fn gain_experience(player: &mut Player, xp:i32)
         println!("HP increased to {}, MP increased to {}", player.health_points, player.magic_points);
     }
 }
+
+
 fn main()
 {
     let mut rooms = create_rooms();
     let mut player = initialize_player();
-    game_loop(&mut rooms, &mut player);
+    let mut monster = initialize_monster();
+    game_loop(&mut rooms, &mut player, &mut monster);
 }
